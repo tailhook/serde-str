@@ -1,0 +1,20 @@
+[package]
+name = "serde_str"
+description = """
+    A serde wrapper that stores type using Display and FromStr.
+"""
+license = "MIT/Apache-2.0"
+readme = "README.md"
+keywords = ["serde", "string", "display", "fromstr", "serialization"]
+categories = ["encoding"]
+homepage = "https://github.com/tailhook/serde-str"
+documentation = "https://docs.rs/serde_str"
+version = "0.1.0"
+authors = ["paul@colomiets.name"]
+
+[dependencies]
+serde = "1.0.0"
+
+[dev-dependencies]
+serde_derive = "1.0.0"
+serde_json = "1.0.0"
