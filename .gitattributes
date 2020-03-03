@@ -1,0 +1,3 @@
+*.rs text=auto
+*.toml text=auto
+*.editorconfig text=auto
