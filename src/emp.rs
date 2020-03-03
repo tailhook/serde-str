@@ -1,4 +1,4 @@
-﻿//! A (de)serializer for anything that has implemented `FromStr` / `Display` (as `ToString`) but does not have `Serialize`/`Deserialize`, and is wrapped in an `Option` type, and may be an empty string.
+﻿//! A (de)serializer for anything that has implemented `FromStr` / `Display` (as `ToString`) but does not have `Serialize`/`Deserialize`, and is wrapped in an `Option` type, and may be represented as an empty string.
 //!
 //! # Example
 //!
@@ -67,7 +67,7 @@
 //! #[derive(Serialize, Deserialize)]
 //! # #[derive(PartialEq, Debug)]
 //! struct WithIp {
-//! 	#[serde(with = "serde_str::opt", skip_serializing_if = "Option::is_none")]
+//! 	#[serde(with = "serde_str::emp", skip_serializing_if = "Option::is_none")]
 //! 	ip: Option<IpAddr>,
 //! }
 //!
@@ -92,7 +92,7 @@
 //! #[derive(Serialize, Deserialize)]
 //! # #[derive(PartialEq, Debug)]
 //! struct WithIp {
-//! 	#[serde(default, with = "serde_str::opt", skip_serializing_if = "Option::is_none")]
+//! 	#[serde(default, with = "serde_str::emp", skip_serializing_if = "Option::is_none")]
 //! 	ip: Option<IpAddr>,
 //! }
 //!
