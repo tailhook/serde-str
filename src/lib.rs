@@ -52,7 +52,7 @@ use std::{
 	str::FromStr,
 };
 
-/// Deserialize function, see crate docs to see how to use it
+/// Deserialize function, see [crate docs examples](https://docs.rs/serde_str) to see how to use it
 pub fn deserialize<'de, D, T: FromStr>(deserializer: D) -> Result<T, D::Error>
 where
 	D: Deserializer<'de>,
@@ -62,7 +62,7 @@ where
 	T::from_str(&s).map_err(DeserializeError::custom)
 }
 
-/// Serialize function, see crate docs to see how to use it
+/// Serialize function, see [crate docs examples](https://docs.rs/serde_str) to see how to use it
 pub fn serialize<S, T: ToString>(
 	value: &T,
 	serializer: S,

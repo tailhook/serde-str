@@ -118,7 +118,7 @@ use std::{
 	fmt::Display,
 	str::FromStr,
 };
-/// serde deserialization function
+/// Deserialize function, see [mod docs examples](https://docs.rs/serde_str/*/serde_str/emp/index.html) to see how to use it
 pub fn deserialize<'de, T, D>(deserializer: D) -> Result<Option<T>, D::Error>
 where
 	T: FromStr,
@@ -136,7 +136,7 @@ where
 	}
 }
 
-/// serde serialization function
+/// Serialize function, see [mod docs examples](https://docs.rs/serde_str/*/serde_str/emp/index.html) to see how to use it
 pub fn serialize<T, S>(
 	value: &Option<T>,
 	serializer: S,
