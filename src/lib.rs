@@ -2,7 +2,7 @@
 //!
 //! [Documentation](https://docs.rs/serde_str) |
 //! [Github](https://github.com/tailhook/serde-str) |
-//! [crates.io](https://crates.io/crates/serde_str)
+//! [crates.io](https://crates.io/crates/serde_str) |
 //! [lib.rs](https://lib.rs/serde_str)
 //!
 //! A (de)serializer for anything that has implemented `FromStr` / `Display`
