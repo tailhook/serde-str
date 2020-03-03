@@ -1,0 +1,14 @@
+hard_tabs = true
+tab_spaces = 2
+edition = "2018"
+max_width = 80
+version = "Two"
+imports_layout = "Vertical"
+merge_imports = true
+overflow_delimited_expr = true
+reorder_impl_items = true
+use_field_init_shorthand = false
+use_small_heuristics = "Default"
+use_try_shorthand = true
+fn_args_layout = "Vertical"
+format_code_in_doc_comments = false
