@@ -1,4 +1,4 @@
-//! # Serde Str
+﻿//! # Serde Str
 //!
 //! [Documentation](https://docs.rs/serde_str) |
 //! [Github](https://github.com/tailhook/serde-str) |

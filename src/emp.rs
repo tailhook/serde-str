@@ -1,4 +1,4 @@
-//! A (de)serializer for anything that has implemented `FromStr` / `Display` (as `ToString`) but does not have `Serialize`/`Deserialize`, and is wrapped in an `Option` type, and may be an empty string.
+﻿//! A (de)serializer for anything that has implemented `FromStr` / `Display` (as `ToString`) but does not have `Serialize`/`Deserialize`, and is wrapped in an `Option` type, and may be an empty string.
 //!
 //! # Example
 //!
