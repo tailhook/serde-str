@@ -90,13 +90,13 @@ use std::{
 	str::FromStr,
 };
 /// serde deserialization function
-pub fn deserialize<'de, T, D>(d: D) -> Result<Option<T>, D::Error>
+pub fn deserialize<'de, T, D>(deserializer: D) -> Result<Option<T>, D::Error>
 where
 	T: FromStr,
 	T::Err: Display,
 	D: Deserializer<'de>,
 {
-	if let Some(s) = Option::deserialize(d)? {
+	if let Some(s) = Option::deserialize(deserializer)? {
 		T::from_str(s).map_err(de::Error::custom).map(|s| Some(s))
 	} else {
 		Ok(None)
@@ -105,12 +105,12 @@ where
 
 /// serde serialization function
 pub fn serialize<T, S>(
-	t: &Option<T>,
-	s: S,
+	value: &Option<T>,
+	serializer: S,
 ) -> Result<S::Ok, S::Error>
 where
 	T: ToString,
 	S: Serializer,
 {
-	Option::serialize(&t.as_ref().map(|ty| ty.to_string()), s)
+	Option::serialize(&value.as_ref().map(|ty| ty.to_string()), serializer)
 }
