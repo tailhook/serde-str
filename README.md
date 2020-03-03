@@ -13,9 +13,10 @@
 [`Display`]: https://doc.rust-lang.org/std/fmt/trait.Display.html
 [`ToString`]: https://doc.rust-lang.org/std/string/trait.ToString.html
 [`FromStr`]: https://doc.rust-lang.org/std/str/trait.FromStr.html
+[serde]: https://serde.rs/
 
-A serde wrapper, that can be used to serialize data types using [`Display`][]
-(as [`ToString::to_string(&self)`][`ToString`]) and [`FromStr`][].
+A [serde][] wrapper that simplifies (de)serializaton of data types using [`Display`][]
+(as [`ToString::to_string(&self)`][`ToString`]) and [`FromStr`][] as intermediataries.
 
 Examples
 -------
@@ -26,7 +27,7 @@ use std::net::IpAddr;
 
 #[derive(Serialize, Deserialize)]
 struct Struct {
-	/// By default IpAddr is serialized the same in human-readable formats
+	/// By default IpAddr serializes the same in human-readable formats
 	/// like json. This forces the impl even for binary formats.
 	///
 	/// More imporantly this is useful for types which don't have serde impl.
@@ -41,7 +42,7 @@ struct Optional {
 }
 #[derive(Serialize, Deserialize)]
 struct Empty {
-	/// The above but an empty string is counted as a none-value
+	/// The above but an empty string is a none-value
 	#[serde(with = "serde_str::emp")]
 	ip: Option<IpAddr>,
 }
