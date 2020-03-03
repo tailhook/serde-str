@@ -3,8 +3,8 @@
 
 [Documentation][docs.rs] |
 [Github][git] |
-[Crate][crates.io] |
-[Libs][lib.rs]
+[crates.io][crates.io] |
+[libs.rs][lib.rs]
 
 [docs.rs]: https://docs.rs/serde_str
 [git]: https://github.com/tailhook/serde-str
