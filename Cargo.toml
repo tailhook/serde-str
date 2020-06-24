@@ -1,14 +1,12 @@
 ﻿[package]
-name = "serde_str"
-description = """
-    A serde wrapper that stores type using Display and FromStr.
-"""
+name = "serde-strz"
+description = "A serde wrapper that stores type using Display and FromStr."
 license = "MIT/Apache-2.0"
 readme = "README.md"
 keywords = ["serde", "string", "display", "fromstr", "serialization", "optional"]
 categories = ["encoding"]
-homepage = "https://github.com/tailhook/serde-str"
-documentation = "https://docs.rs/serde_str"
+homepage = "https://github.com/ZaneHannanAU/serde-str"
+documentation = "https://docs.rs/serde-strz"
 version = "1.0.0"
 authors = ["paul@colomiets.name", "zanehannanau@gmail.com"]
 edition = "2018"
