@@ -1,9 +1,9 @@
 ﻿//! # Serde Str
 //!
-//! [Documentation](https://docs.rs/serde_str) |
+//! [Documentation](https://docs.rs/) |
 //! [Github](https://github.com/tailhook/serde-str) |
-//! [crates.io](https://crates.io/crates/serde_str) |
-//! [lib.rs](https://lib.rs/serde_str)
+//! [crates.io](https://crates.io/crates/) |
+//! [lib.rs](https://lib.rs/)
 //!
 //! A (de)serializer for anything that has implemented `FromStr` / `Display`
 //! but does not have `Serialize`/`Deserialize`.
@@ -18,7 +18,7 @@
 //! #[derive(Serialize, Deserialize)]
 //! # #[derive(PartialEq, Debug)]
 //! struct WithIp {
-//! 	#[serde(with = "serde_str")]
+//! 	#[serde(with = "serde_strz")]
 //! 	ip: IpAddr,
 //! }
 //!
@@ -44,7 +44,6 @@ use serde::{
 		Deserialize,
 		Error as DeserializeError,
 	},
-	ser::Serialize,
 	Deserializer,
 	Serializer,
 };
@@ -53,7 +52,7 @@ use std::{
 	str::FromStr,
 };
 
-/// Deserialize function, see [crate docs examples](https://docs.rs/serde_str) to see how to use it
+/// Deserialize function, see [crate docs examples](https://docs.rs/serde_strz) to see how to use it
 pub fn deserialize<'de, D, T: FromStr>(deserializer: D) -> Result<T, D::Error>
 where
 	D: Deserializer<'de>,
@@ -63,16 +62,16 @@ where
 	T::from_str(&s).map_err(DeserializeError::custom)
 }
 
-/// Serialize function, see [crate docs examples](https://docs.rs/serde_str) to see how to use it
-pub fn serialize<S, T: ToString>(
+/// Serialize function, see [crate docs examples](https://docs.rs/serde_strz) to see how to use it
+pub fn serialize<S, T>(
 	value: &T,
 	serializer: S,
 ) -> Result<S::Ok, S::Error>
 where
 	S: Serializer,
+	T: fmt::Display,
 {
-	let s = value.to_string();
-	String::serialize(&s, serializer)
+	serializer.collect_str(value)
 }
 
 pub mod emp;

@@ -7,7 +7,7 @@ keywords = ["serde", "string", "display", "fromstr", "serialization"]
 categories = ["encoding"]
 homepage = "https://github.com/ZaneHannanAU/serde-str"
 documentation = "https://docs.rs/serde-strz"
-version = "1.0.0"
+version = "1.1.0"
 authors = ["paul@colomiets.name", "zanehannanau@gmail.com"]
 edition = "2018"
 
