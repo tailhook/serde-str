@@ -1,0 +1,8 @@
+﻿*.rs text=auto
+*.toml text=auto
+*.yml text=auto
+*.yaml text=auto
+README.md text=auto
+.editorconfig text=auto
+.gitattributes text=auto
+.gitignore text=auto

@@ -1,8 +1,9 @@
-//! # Serde Str
+﻿//! # Serde Str
 //!
 //! [Documentation](https://docs.rs/serde_str) |
 //! [Github](https://github.com/tailhook/serde-str) |
-//! [Crate](https://crates.io/crates/serde_str)
+//! [crates.io](https://crates.io/crates/serde_str) |
+//! [lib.rs](https://lib.rs/serde_str)
 //!
 //! A (de)serializer for anything that has implemented `FromStr` / `Display`
 //! but does not have `Serialize`/`Deserialize`.
@@ -10,88 +11,69 @@
 //! # Example
 //!
 //! ```rust
-//! #[macro_use]
-//! extern crate serde_derive;
-//!
-//! extern crate serde;
-//! extern crate serde_str;
-//!
+//! # #[macro_use] extern crate serde_derive;
 //! use std::net::IpAddr;
 //!
-//!
+//! /// A demonstration structure that holds a lonesome IP address.
 //! #[derive(Serialize, Deserialize)]
-//! struct Timestamps {
-//!     #[serde(with = "serde_str")]
-//!     pattern: IpAddr,
+//! # #[derive(PartialEq, Debug)]
+//! struct WithIp {
+//! 	#[serde(with = "serde_str")]
+//! 	ip: IpAddr,
 //! }
 //!
-//! #
-//! # fn main() {}
+//! use serde_json::{
+//! 	from_str,
+//! 	to_string,
+//! };
+//! # fn main() -> serde_json::Result<()> {
+//! let with_ip: WithIp = from_str(r#"{"ip": "127.0.0.1"}"#)?;
+//! assert_eq!(WithIp { ip: [127, 0, 0, 1].into() }, with_ip);
+//! assert_eq!(to_string(&with_ip)?, r#"{"ip":"127.0.0.1"}"#);
+//!
+//! let with_ip: WithIp = from_str(r#"{"ip": "::"}"#)?;
+//! assert_eq!(WithIp { ip: [0u16; 8].into() }, with_ip);
+//! assert_eq!(to_string(&with_ip)?, r#"{"ip":"::"}"#);
+//! # Ok(())
+//! # }
 //! ```
-#![warn(missing_docs)]
-#![warn(missing_debug_implementations)]
-extern crate serde;
+#![forbid(missing_docs, missing_debug_implementations, unsafe_code, dead_code)]
+#![deny(unused)]
+use serde::{
+	de::{
+		Deserialize,
+		Error as DeserializeError,
+	},
+	ser::Serialize,
+	Deserializer,
+	Serializer,
+};
+use std::{
+	fmt,
+	str::FromStr,
+};
 
-#[cfg(test)] extern crate serde_json;
-#[cfg(test)] #[macro_use] extern crate serde_derive;
-
-use std::fmt;
-use std::str::FromStr;
-use std::marker::PhantomData;
-
-use serde::de::{Visitor, Error};
-use serde::{Deserializer, Serializer};
-
-
-struct StrVisitor<T>(PhantomData<*const T>);
-
-
-impl<'a, T: FromStr> Visitor<'a> for StrVisitor<T>
-    where <T as FromStr>::Err: fmt::Display
-{
-    type Value = T;
-
-    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("valid regular expression")
-    }
-    fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
-        where E: Error
-    {
-        value.parse().map_err(E::custom)
-    }
-}
-
-/// Deserialize function, see crate docs to see how to use it
+/// Deserialize function, see [crate docs examples](https://docs.rs/serde_str) to see how to use it
 pub fn deserialize<'de, D, T: FromStr>(deserializer: D) -> Result<T, D::Error>
-    where D: Deserializer<'de>,
-          <T as FromStr>::Err: fmt::Display
+where
+	D: Deserializer<'de>,
+	<T as FromStr>::Err: fmt::Display,
 {
-    deserializer.deserialize_str(StrVisitor(PhantomData))
+	let s = String::deserialize(deserializer)?;
+	T::from_str(&s).map_err(DeserializeError::custom)
 }
 
-/// Serialize function, see crate docs to see how to use it
-pub fn serialize<S, T: ToString>(value: &T, serializer: S)
-    -> Result<S::Ok, S::Error>
-    where S: Serializer,
+/// Serialize function, see [crate docs examples](https://docs.rs/serde_str) to see how to use it
+pub fn serialize<S, T: ToString>(
+	value: &T,
+	serializer: S,
+) -> Result<S::Ok, S::Error>
+where
+	S: Serializer,
 {
-    serializer.serialize_str(&value.to_string())
+	let s = value.to_string();
+	String::serialize(&s, serializer)
 }
 
-
-#[cfg(test)]
-mod test {
-    use serde_json::{from_str, to_string};
-    use std::net::IpAddr;
-
-    #[derive(Deserialize, Serialize)]
-    struct WithIp {
-        ip: IpAddr,
-    }
-
-    #[test]
-    fn roundtrip() {
-        let with_ip: WithIp = from_str(r#"{"ip": "127.0.0.1"}"#).unwrap();
-        assert_eq!(to_string(&with_ip).unwrap(), r#"{"ip":"127.0.0.1"}"#);
-    }
-
-}
+pub mod emp;
+pub mod opt;
