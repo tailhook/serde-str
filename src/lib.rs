@@ -37,7 +37,7 @@
 //! # Ok(())
 //! # }
 //! ```
-#![forbid(missing_docs, missing_debug_implementations, unsafe_code, dead_code)]
+#![forbid(missing_docs, missing_debug_implementations, unsafe_code)]
 #![deny(unused)]
 use serde::{
 	de::{
