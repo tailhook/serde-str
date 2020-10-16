@@ -10,7 +10,7 @@
 //! #[derive(Serialize, Deserialize)]
 //! # #[derive(PartialEq, Debug)]
 //! struct WithIp {
-//! 	#[serde(with = "serde_str::emp")]
+//! 	#[serde(with = "serde_strz::emp")]
 //! 	ip: Option<IpAddr>,
 //! }
 //!
@@ -39,7 +39,7 @@
 //! #[derive(Serialize, Deserialize)]
 //! # #[derive(PartialEq, Debug)]
 //! struct WithIp {
-//! 	#[serde(with = "serde_str::emp", default)]
+//! 	#[serde(with = "serde_strz::emp", default)]
 //! 	ip: Option<IpAddr>,
 //! }
 //!
@@ -67,7 +67,7 @@
 //! #[derive(Serialize, Deserialize)]
 //! # #[derive(PartialEq, Debug)]
 //! struct WithIp {
-//! 	#[serde(with = "serde_str::emp", skip_serializing_if = "Option::is_none")]
+//! 	#[serde(with = "serde_strz::emp", skip_serializing_if = "Option::is_none")]
 //! 	ip: Option<IpAddr>,
 //! }
 //!
@@ -92,7 +92,7 @@
 //! #[derive(Serialize, Deserialize)]
 //! # #[derive(PartialEq, Debug)]
 //! struct WithIp {
-//! 	#[serde(default, with = "serde_str::emp", skip_serializing_if = "Option::is_none")]
+//! 	#[serde(default, with = "serde_strz::emp", skip_serializing_if = "Option::is_none")]
 //! 	ip: Option<IpAddr>,
 //! }
 //!
@@ -111,14 +111,13 @@ use serde::{
 	de,
 	Deserialize,
 	Deserializer,
-	Serialize,
 	Serializer,
 };
 use std::{
 	fmt::Display,
 	str::FromStr,
 };
-/// Deserialize function, see [mod docs examples](https://docs.rs/serde_str/*/serde_str/emp/index.html) to see how to use it
+/// Deserialize function, see [mod docs examples](https://docs.rs/serde_strz/*/serde_strz/emp/index.html) to see how to use it
 pub fn deserialize<'de, T, D>(deserializer: D) -> Result<Option<T>, D::Error>
 where
 	T: FromStr,
@@ -136,15 +135,18 @@ where
 	}
 }
 
-/// Serialize function, see [mod docs examples](https://docs.rs/serde_str/*/serde_str/emp/index.html) to see how to use it
+/// Serialize function, see [mod docs examples](https://docs.rs/serde_strz/*/serde_strz/emp/index.html) to see how to use it
 pub fn serialize<T, S>(
 	value: &Option<T>,
 	serializer: S,
 ) -> Result<S::Ok, S::Error>
 where
-	T: ToString,
+	T: Display,
 	S: Serializer,
 {
-	let value = value.as_ref().map(|ty| ty.to_string()).unwrap_or_default();
-	String::serialize(&value, serializer)
+	if let Some(val) = value.as_ref() {
+		serializer.collect_str(val)
+	} else {
+		serializer.serialize_str("")
+	}
 }

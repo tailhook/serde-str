@@ -6,13 +6,13 @@
 [crates.io][crates.io] |
 [libs.rs][lib.rs]
 
-[docs.rs]: https://docs.rs/serde_str
-[git]: https://github.com/tailhook/serde-str
-[crates.io]: https://crates.io/crates/serde_str
-[lib.rs]: https://lib.rs/serde_str
-[`Display`]: https://doc.rust-lang.org/std/fmt/trait.Display.html
-[`ToString`]: https://doc.rust-lang.org/std/string/trait.ToString.html
-[`FromStr`]: https://doc.rust-lang.org/std/str/trait.FromStr.html
+[docs.rs]: https://docs.rs/serde-strz
+[git]: https://github.com/ZaneHannanAU/serde-str
+[crates.io]: https://crates.io/crates/serde-strz
+[lib.rs]: https://lib.rs/serde-strz
+[`Display`]: https://doc.rust-lang.org/core/fmt/trait.Display.html
+[`ToString`]: https://doc.rust-lang.org/alloc/string/trait.ToString.html
+[`FromStr`]: https://doc.rust-lang.org/core/str/trait.FromStr.html
 [serde]: https://serde.rs/
 
 A [serde][] wrapper that simplifies (de)serializaton of data types using [`Display`][]
@@ -27,28 +27,28 @@ use std::net::IpAddr;
 
 #[derive(Serialize, Deserialize)]
 struct Struct {
-	/// By default IpAddr serializes the same in human-readable formats
-	/// like json. This forces the impl even for binary formats.
-	///
-	/// More imporantly this is useful for types which don't have serde impl.
+	// By default IpAddr serializes the same in human-readable formats
+	// like json. This forces the impl even for binary formats.
+	//
+	// More imporantly this is useful for types which don't have serde impl.
 	#[serde(with = "serde_str")]
 	ip: IpAddr,
 }
 #[derive(Serialize, Deserialize)]
 struct Optional {
-	/// The above but handling null types
+	// The above but handling null types
 	#[serde(with = "serde_str::opt")]
 	ip: Option<IpAddr>,
 }
 #[derive(Serialize, Deserialize)]
 struct Empty {
-	/// The above but an empty string is a none-value
+	// The above but an empty string is a none-value
 	#[serde(with = "serde_str::emp")]
 	ip: Option<IpAddr>,
 }
 #[derive(Serialize, Deserialize)]
 struct EmptyOptional {
-	/// The above but an empty string, null, or unspecified is a none-value.
+	// The above but an empty string, null, or unspecified is a none-value.
 	#[serde(with = "serde_str::emp", default)]
 	ip: Option<IpAddr>,
 }

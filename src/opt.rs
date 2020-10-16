@@ -10,7 +10,7 @@
 //! #[derive(Serialize, Deserialize)]
 //! # #[derive(PartialEq, Debug)]
 //! struct WithIp {
-//! 	#[serde(with = "serde_str::opt")]
+//! 	#[serde(with = "serde_strz::opt")]
 //! 	ip: Option<IpAddr>,
 //! }
 //!
@@ -39,7 +39,7 @@
 //! #[derive(Serialize, Deserialize)]
 //! # #[derive(PartialEq, Debug)]
 //! struct WithIp {
-//! 	#[serde(with = "serde_str::opt", default)]
+//! 	#[serde(with = "serde_strz::opt", default)]
 //! 	ip: Option<IpAddr>,
 //! }
 //!
@@ -67,7 +67,7 @@
 //! #[derive(Serialize, Deserialize)]
 //! # #[derive(PartialEq, Debug)]
 //! struct WithIp {
-//! 	#[serde(with = "serde_str::opt", default, skip_serializing_if = "Option::is_none")]
+//! 	#[serde(with = "serde_strz::opt", default, skip_serializing_if = "Option::is_none")]
 //! 	ip: Option<IpAddr>,
 //! }
 //!
@@ -89,7 +89,7 @@ use std::{
 	fmt::Display,
 	str::FromStr,
 };
-/// Deserialize function, see [mod docs examples](https://docs.rs/serde_str/*/serde_str/opt/index.html) to see how to use it
+/// Deserialize function, see [mod docs examples](https://docs.rs/serde-strz/*/serde_strz/opt/index.html) to see how to use it
 pub fn deserialize<'de, T, D>(deserializer: D) -> Result<Option<T>, D::Error>
 where
 	T: FromStr,
@@ -103,14 +103,31 @@ where
 	}
 }
 
-/// Serialize function, see [mod docs examples](https://docs.rs/serde_str/*/serde_str/opt/index.html) to see how to use it
+/// Serialize function, see [mod docs examples](https://docs.rs/serde-strz/*/serde_strz/opt/index.html) to see how to use it
 pub fn serialize<T, S>(
 	value: &Option<T>,
 	serializer: S,
 ) -> Result<S::Ok, S::Error>
 where
-	T: ToString,
+	T: Display,
 	S: Serializer,
 {
-	Option::serialize(&value.as_ref().map(|ty| ty.to_string()), serializer)
+	if let Some(val) = value.as_ref() {
+		#[derive(Debug)]
+		struct St<T: Display>(T);
+		impl<T: Display> Serialize for St<T> {
+			fn serialize<S>(
+				&self,
+				s: S,
+			) -> Result<S::Ok, S::Error>
+			where
+				S: Serializer,
+			{
+				s.collect_str(&self.0)
+			}
+		}
+		serializer.serialize_some(&St(val))
+	} else {
+		serializer.serialize_none()
+	}
 }
